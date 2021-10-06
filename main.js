@@ -358,6 +358,6 @@ FORM_NODES.container.oninput = onSearchControlChange
     })
 
     // Initial verify
-    onCedChange(null)
+    onCedChange()
 
 }

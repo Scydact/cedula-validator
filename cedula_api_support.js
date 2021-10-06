@@ -8,7 +8,6 @@ function fetchUserByCed(cedNo) {
                 .then(response => response.json())
                 .then(json => resolve(json))
                 .catch(error => {
-                    console.error('Error! ', error)
                     reject(error)
                 })
         })
@@ -21,8 +20,10 @@ function fetchUserByCed(cedNo) {
 // HTML stuff
 function registerAPI(url) {
     CED_API = url
-    document.body.classList.add('dark-mode')
-    localStorage.setItem(CED_API_LOCALSTORAGE, CED_API)
+    if (CED_API) {
+        document.body.classList.add('dark-mode')
+        localStorage.setItem(CED_API_LOCALSTORAGE, CED_API)
+    }
 }
 function unregisterAPI() {
     CED_API = null
@@ -34,6 +35,7 @@ const VALIDATION_API_BTN = 'validation-api-manage'
 function createAddAPIBtn() {
     const a = document.createElement('a')
     a.id = VALIDATION_API_BTN
+    a.href = '#'
 
     if (CED_API) {
         a.textContent = 'Remover API de validación'
@@ -55,11 +57,13 @@ function createAddAPIBtn() {
 
 
 function updateAPIBtn() {
-    const footer = document.getElementById('footer')
+    const container = document.getElementById('api-btn')
     let api_btn = document.getElementById(VALIDATION_API_BTN)
     if (api_btn) api_btn.remove()
 
-    footer.append(createAddAPIBtn())
+    container.append(createAddAPIBtn())
+    if (typeof onCedChange === 'function')
+        onCedChange(null, true) // Force update
 }
 
 // On init
