@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Validador de cedula - Extras</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        .bookmarklet {
+            display: inline-block;
+            padding: .2em 1em;
+            background: rgb(13, 95, 219);
+            margin: .5em;
+            border-radius: .5em;
+            color: white;
+            text-decoration: none;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>Partes extras para ayuda en el trabajo:</h1>
+    <h2>Bookmarklets</h2>
+    <a class="bookmarklet"
+        href="javascript:(function()%7Bdocument.querySelector('form > button%3Alast-child').removeAttribute('disabled')%7D)()">
+        Reparar boton de Guardar</a>
+    <a class="bookmarklet"
+        href="javascript:(function()%7Bvar currentDose %3D document.querySelector('%23rows').childElementCount%3Bvar doseNum %3D parseInt(prompt('Numero de registros%3F'))%3Bvar addNewBtn %3D document.querySelector('form > button')%3Bfor (let i %3D doseNum - currentDose%3B i > 0%3B i--)%7BaddNewBtn.click()%3B%7D%7D)()">
+        Agregar N filas</a>
+    <a class="bookmarklet"
+        href="javascript:(function()%7Bfunction dispatchChangeEvent(el) %7Bvar evt %3D document.createEvent('HTMLEvents')%3Bevt.initEvent('change'%2C false%2C true)%3Bel.dispatchEvent(evt)%3B%7Dvar doseNum %3D parseInt(prompt('Numero de dosis%3F')) - 1%3Bfor (const el of %5B...document.querySelectorAll('%23dose')%5D) %7Bel.options%5BdoseNum%5D.selected %3D 1%3BdispatchChangeEvent(el)%3B%7D%7D)()">
+        Cambiar todas las dosis</a>
+    <a class="bookmarklet"
+        href="javascript:(function()%7Bdocument.querySelectorAll('.form-check%3Alast-child input').forEach(x %3D> x.click())%7D)()">
+        Modificar todo manualmente</a>
+
+    <h2>Estilos auxiliares</h2>
+    <ul>
+        <li>Instalar la extension <a
+                href="https://chrome.google.com/webstore/detail/stylus/clngdbkpkpeebahjckkjfobafhncgmne?hl=en">Stylus</a>.
+        </li>
+        <li>Instalar los <a
+                href="https://raw.githubusercontent.com/Scydact/cedula-validator/main/validator.user.css">Estilos
+                Personalizados</a>.</li>
+        <li>Disfrute</li>
+    </ul>
+
+</body>
+
+</html>

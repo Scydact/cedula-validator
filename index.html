@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Validador de cedula</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="validador.css">
+</head>
+
+
+<body>
+    <main>
+        <h2>Permutaciones de número de cédula</h2>
+        <div id="input_container">
+            <input type="text" id="in" placeholder="No. cédula de ±11 digitos."
+                inputmode="numeric" />
+            <span id="colored_in"></span>
+        </div>
+        <div id="info" class="card info"></div>
+        <form id="search_controls" class="card" action="javascript:void(0);">
+            <label>Nombre: <input type="search" name="search-name" id="search-name"></label>
+            <label>Edad: <input type="search" name="search-age" id="search-age" inputmode="decimal"></label>
+            <label>Provincia: <select name="search-province" id="search-province"></select></label>
+            <label>Valido: <input type="checkbox" name="search-valid" id="search-valid"></label>
+        </form>
+        <div id="out"></div>
+
+        <div class="card tips">
+            <h2>Tips</h2>
+            <ul>
+                <li>Empieze reemplazando desde la última permutación hasta la primera.</li>
+
+                <li>
+                    Digitos usualmente confusos (marcados con ⭐ si hay):
+                    <ul>
+                        <li>6 ⟷ 0</li>
+                        <li>3 ⟷ 8</li>
+                        <li>1 ⟷ 7</li>
+                        <li>4 ⟷ 11</li>
+                        <li>1 ⟷ 2</li>
+                        <li>5 ⟷ 3</li>
+                        <li>4 ⟷ 9</li>
+                    </ul>
+                </li>
+            </ul>
+
+        </div>
+
+        <footer id="footer"> Scydact 2021 - <span id="js-version"></span><br> </footer>
+
+        <div id="popup-container">
+
+        </div>
+    </main>
+
+    <!-- Helpers -->
+    <script src="algorithm_and_helpers.js"></script>
+
+    <!-- API script :D -->
+    <script src="cedula_api_support.js"></script>
+
+    <!-- Ced struct -->
+    <script src="ced_struct.js"></script>
+
+    <!-- Main -->
+    <script src="main.js"></script>
+</body>
+
+
+
+
+</html>

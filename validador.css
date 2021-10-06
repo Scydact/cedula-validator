@@ -1,0 +1,186 @@
+html, body, * {
+    font-family: monospace;
+    box-sizing: border-box;
+}
+
+:root {
+    --bg0: initial;
+    --fg0: initial;
+    --input-border: rgba(0, 0, 0, 0.2);
+    --initial-bg: rgba(0, 0, 255, 0.3);
+    --data-bg: rgba(0, 0, 0, 0.2);
+    --end-bg: rgba(46, 184, 142, 0.5);
+    --special-bg: red;
+    --card-bg: rgba(0, 0, 0, 0.1);
+    --info-bg: rgb(212, 239, 255);
+    --error-bg: rgb(255, 184, 184);
+    --ok-bg: rgb(207, 255, 197);
+    --tips-bg: rgb(255, 228, 174);
+    --tips-fg: rgb(78, 58, 16);
+}
+
+body.dark-mode {
+    --bg0: #222;
+    --fg0: white;
+    --input-border: rgba(255, 255, 255, 0.2);
+    --card-bg: rgba(255, 255, 255, 0.1);
+    --info-bg: rgb(2, 146, 232);
+    --error-bg: rgb(197, 14, 14);
+    --ok-bg: rgb(28, 165, 0);
+}
+
+body {
+    background: var(--bg0);
+    color: var(--fg0);
+}
+
+footer {
+    text-align: center;
+    color: gray;
+    font-style: italic;
+    padding-top: 5em;
+}
+
+p {
+    margin: 0;
+    padding: 0;
+}
+
+p, li {
+    margin-bottom: .2em;
+}
+
+#out li:nth-child(3n) {
+    margin-bottom: 1em;
+}
+
+main {
+    margin: auto;
+    width: fit-content;
+}
+
+h2 {
+    max-width: 300;
+}
+
+#info:empty {
+    display: none;
+}
+
+#input_container, #out, center {
+    margin: auto;
+    display: block;
+}
+
+#input_container {
+    position: relative;
+    width: 16em;
+}
+
+#colored_in {
+    position: absolute;
+    top: 0;
+    left: 0;
+    pointer-events: none;
+}
+
+#in {
+    color: rgba(0, 0, 0, 0.2);
+}
+
+#in, #colored_in {
+    color: black;
+    font-size: 1.5em;
+    width: 100%;
+    border: 2px solid var(--input-border);
+    margin: 0;
+    margin-bottom: 1em;
+    padding: .3em;
+    border-radius: .2em;
+}
+
+#in:hover, .copy-to-clip:hover {
+    border-color: rgba(0, 162, 255, 0.2);
+}
+
+#in:focus, .copy-to-clip:focus {
+    border-color: rgb(0, 162, 255);
+    outline: none;
+}
+
+.copy-to-clip {
+    margin-right: .5em;
+    padding: 0;
+    border: 2px solid rgba(0, 0, 0, 0.2);
+    border-radius: .2em;
+    width: 1.6em;
+    height: 1.6em;
+}
+
+.initial {
+    background: var(--initial-bg);
+}
+
+.data {
+    background: var(--data-bg);
+}
+
+.end {
+    background: var(--end-bg);
+}
+
+.special {
+    background: var(--special-bg);
+}
+
+.card, .popup {
+    border-radius: .4em;
+    padding: 1em;
+    margin: 1em;
+    box-shadow: 0 0 7px rgba(0, 0, 0, 0.1);
+    background: var(--card-bg);
+}
+
+.card:empty {
+    display: none;
+}
+
+.info, .popup {
+    background-color: var(--info-bg);
+}
+
+.error {
+    background-color: var(--error-bg);
+}
+
+.ok {
+    background-color: var(--ok-bg);
+}
+
+.tips {
+    background-color: var(--tips-bg);
+    color: var(--tips-fg);
+}
+
+#popup-container {
+    position: fixed;
+    top: 0;
+    right: 0;
+}
+
+.popup {
+    max-width: 200px;
+    transition: position 2s ease;
+}
+
+.highlight {
+    box-shadow: 0 0 0px 2px #ffa601;
+}
+
+.hidden {
+    display: none;
+}
+
+#search-age {
+    width: 6em;
+}
