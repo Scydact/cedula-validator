@@ -1,7 +1,7 @@
 /* ==UserStyle==
 @name           vacunate-validator mods
 @namespace      github.com/openstyles/stylus
-@version        1.0.1
+@version        1.0.2
 @license        LGPL-3.0-or-later
 @updateURL      https://raw.githubusercontent.com/Scydact/cedula-validator/main/validator.user.css
 @description    Modificaciones de estilo para el sitio.
@@ -81,7 +81,12 @@
 
                     .drag-box {
                         background-color: rgba(65, 87, 207, .5);
-                        backdrop-filter : blur(2px);
+                        backdrop-filter : blur(3px);
+                        transition      : backdrop-filter 300ms;
+                    }
+
+                    .drag-box:hover {
+                        backdrop-filter: blur(0px);
                     }
 
                     app-pdf-viewer {
