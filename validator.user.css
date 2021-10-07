@@ -1,7 +1,7 @@
 /* ==UserStyle==
 @name           vacunate-validator mods
 @namespace      github.com/openstyles/stylus
-@version        1.0.0
+@version        1.0.1
 @license        LGPL-3.0-or-later
 @updateURL      https://raw.githubusercontent.com/Scydact/cedula-validator/main/validator.user.css
 @description    Modificaciones de estilo para el sitio.
@@ -27,134 +27,163 @@
 
     /* FULLSCREEN MOD */
     .fullscreen-mod(0) {}
+
     .fullscreen-mod(1) {
         nav.navbar {
-            margin-bottom: 0!important;
+            margin-bottom: 0 !important;
         }
 
         .container-fluid.px-5 {
-            padding: 0!important;
+            padding: 0 !important;
         }
 
         .py-3 {
-            padding-left: 1.5em;
+            padding-left : 1.5em;
             padding-right: 1.5em;
         }
 
         app-page-validator {
-            > div:nth-child(1) {
-                margin: 0!important;
-                > button {
+            >div:nth-child(1) {
+                margin: 0 !important;
+
+                // Boton Atras
+                >button {
+                    z-index : 10;
                     position: absolute;
-                    top: 10px;
-                    left: 425px;
+                    bottom  : 2em;
+                    left    : 1em;
+
+                    &::before {
+                        content     : "↩";
+                        margin-right: .5em;
+                    }
                 }
-            } // Container for page division
-            > div:nth-child(2) {
-                margin: 0!important;
+            }
+
+            // Container for page division
+            >div:nth-child(2) {
+                margin      : 0 !important;
                 --form-width: 400px;
 
 
-                display: grid;
-                grid-template-rows: calc(100vh - 56px);
+                display              : grid;
+                grid-template-rows   : calc(100vh - 56px);
                 grid-template-columns: calc(100vw - var(--form-width)) var(--form-width);
-                align-items: stretch;
-                justify-items: stretch; // Map
-                > div:nth-child(1) {
-                    background: #2f2f2f;
+                align-items          : stretch;
+                justify-items        : stretch; // Map
+
+                >div:nth-child(1) {
+                    background  : #2f2f2f;
                     justify-self: stretch;
-                    width: auto;
-                    padding: 0;
-                    position: relative; // Separador
+                    width       : auto;
+                    padding     : 0;
+                    position    : relative; // Separador
+
                     .drag-box {
                         background-color: rgba(65, 87, 207, .5);
-                        backdrop-filter: blur(2px);
+                        backdrop-filter : blur(2px);
                     }
 
                     app-pdf-viewer {
                         .card {
                             box-shadow: none;
                         }
+
                         pdf-viewer {
-                            height: calc(100vh - 56px);
+                            height    : calc(100vh - 56px);
                             margin-top: -50px;
-                        } // Map controls
+                        }
+
+                        // Map controls
                         div:nth-child(2) {
-                            position: absolute;
-                            bottom: 50px;
-                            right: 30px;
-                            z-index: 10;
+                            position      : absolute;
+                            bottom        : 50px;
+                            right         : 30px;
+                            z-index       : 10;
                             flex-direction: column;
 
                             button {
-                                margin-right: 0!important;
-                                margin-bottom: 5px;
+                                margin-right   : 0 !important;
+                                margin-bottom  : 5px;
                                 backdrop-filter: blur(2px);
                             }
                         }
                     }
-                } // Form
-                > div:nth-child(2) {
-                    width: auto;
-                    padding: 20px 15px 40px;
+                }
+
+                // Form
+                >div:nth-child(2) {
+                    width   : auto;
+                    padding : 20px 15px 40px;
                     overflow: auto;
-                    z-index: 20;
+                    z-index : 20;
                 }
             }
         }
     }
+
     .fullscreen-mod(@fullscreen-map);
 
 
 
     /* FULLSCREEN MOD */
     .all-registries-mod(0) {}
+
     .all-registries-mod(1) {
         app-page-validator form {
             .collapse:not(.show) {
-                display: inherit;
+                display   : inherit;
                 background: hsla(0, 0, 50%, 7%);
             }
 
             .accordion-item {
                 margin-bottom: .5em;
+
                 .accordion-button {
                     padding: .3em;
                 }
+
                 &:nth-child(12) .accordion-button {
                     background: #3589ff;
-                    color: white;
+                    color     : white;
                 }
             }
 
             .accordion-body {
-                display: grid;
-                grid-template-areas: "cedula cedula cedula cedula" "nombre nombre nombre nombre" "edad dosis verificar modificar";
+                display            : grid;
+                grid-template-areas: "cedula cedula cedula cedula""nombre nombre nombre nombre""edad dosis verificar modificar";
 
                 place-items: stretch;
-                padding: .2em .2em 1em;
+                padding    : .2em .2em 1em;
 
-                > .form-group:nth-child(1) {
+                >.form-group:nth-child(1) {
                     grid-area: cedula;
                 }
-                > .form-group:nth-child(2) {
+
+                >.form-group:nth-child(2) {
                     grid-area: nombre;
                 }
-                > .form-group:nth-child(3) {
+
+                >.form-group:nth-child(3) {
                     grid-area: edad;
                 }
-                > .form-group:nth-child(4) {
+
+                >.form-group:nth-child(4) {
                     grid-area: dosis;
                 }
-                > .form-check:nth-child(5) {
+
+                >.form-check:nth-child(5) {
                     grid-area: verificar;
+
                     &::after {
                         display: block;
                         content: "Verif."
                     }
                 }
-                > .form-check:nth-child(6) {
+
+                >.form-check:nth-child(6) {
                     grid-area: modificar;
+
                     &::after {
                         display: block;
                         content: "Mod."
@@ -162,39 +191,41 @@
                 }
 
                 label {
-                    font-size: 0.8em;
-                    max-width: 3em;
-                    overflow: hidden;
-                    white-space: nowrap;
+                    font-size    : 0.8em;
+                    max-width    : 3em;
+                    overflow     : hidden;
+                    white-space  : nowrap;
                     text-overflow: ".";
                     padding-right: .3em;
                 }
 
                 .mt-2 {
-                    margin-top: 0!important;
+                    margin-top: 0 !important;
                 }
 
                 .form-control {
                     padding: .1em .5em;
                 }
 
-                > .form-check {
-                    display: flex;
+                >.form-check {
+                    display       : flex;
                     flex-direction: column;
-                    align-items: center;
-                    margin-bottom: -10px;
+                    align-items   : center;
+                    margin-bottom : -10px;
+
                     input {
                         margin-left: 0;
                     }
+
                     label {
                         display: none;
                     }
                 }
 
-                > .form-group {
-                    display: grid;
+                >.form-group {
+                    display              : grid;
                     grid-template-columns: 2em auto;
-                    align-items: center;
+                    align-items          : center;
                 }
             }
 
@@ -211,10 +242,11 @@
 
     /* DARK MODE */
     .dark-mode-mod(0) {}
+
     .dark-mode-mod(1) {
         body {
             background-color: #242424;
-            color: white;
+            color           : white;
         }
 
         .accordion-item {
@@ -223,21 +255,21 @@
 
         .mat-dialog-container {
             background: #2f2f2f;
-            color: #ddd;
+            color     : #ddd;
         }
 
         tr {
-            color: white!important;
+            color: white !important;
         }
 
         .form-control {
             background: #000;
-            color: white;
+            color     : white;
         }
 
         .form-control:focus {
             background: #3c4d6a;
-            color: white;
+            color     : white;
         }
 
         .form-control:disabled,
@@ -251,15 +283,17 @@
 
         .accordion-header .accordion-button {
             background: #002962;
-            color: #78a9f2;
+            color     : #78a9f2;
         }
     }
+
     .dark-mode-mod(@dark-mode);
 
 
 
     /* DARK MODE READER */
     .dark-mode-reader-mod(0) {}
+
     .dark-mode-reader-mod(1) {
         pdf-viewer {
             filter: invert(1) hue-rotate(180deg);
@@ -269,6 +303,7 @@
             background-color: #181818;
         }
     }
+
     .dark-mode-reader-mod(@dark-mode-reader);
 
 
@@ -276,6 +311,7 @@
 
     /* BIGGER ROW NUMBER */
     .bigger-row-num-mod(0) {}
+
     .bigger-row-num-mod(1) {
         .accordion {
             counter-reset: fila
@@ -291,58 +327,95 @@
 
         .accordion-header::after {
             counter-increment: fila;
-            content: counter(fila);
-            z-index: 5;
-            position: absolute;
-            font-size: 0.8em;
-            top: -.4rem;
-            left: -.5rem;
-            background: #6d76ff;
-            color: white;
-            width: 2.5rem;
-            height: 2.5rem;
-            display: grid;
-            place-items: center;
-            border-radius: 100%;
+            content          : counter(fila);
+            z-index          : 5;
+            position         : absolute;
+            font-size        : 0.8em;
+            top              : -.4rem;
+            left             : -.5rem;
+            background       : #6d76ff;
+            color            : white;
+            width            : 2.5rem;
+            height           : 2.5rem;
+            display          : grid;
+            place-items      : center;
+            border-radius    : 100%;
         }
     }
+
     .bigger-row-num-mod(@bigger-row-num);
 
 
-
+    .compact-btn {
+        width      : 2.5em;
+        white-space: nowrap;
+        overflow   : hidden;
+    }
 
     /* MOVE CONTROL BTNS UP */
     .move-ctrl-btn-mod(0) {}
+
     .move-ctrl-btn-mod(1) {
-        form > button {
+        form>button {
             position: absolute;
-            z-index: 50;
-            top: 0;
+            z-index : 50;
+            top     : 0;
+
             &:nth-of-type(1) {
-                right: 13em;
-            }
-            &:nth-of-type(2) {
-                right: 5em;
-            }
-            &:nth-of-type(3) {
-                right: 2em;
-                width: 2.5em;
-                white-space: nowrap;
-                overflow: hidden;
+                right: 20em;
+                .compact-btn();
+
                 &::before {
-                    content: "💾";
+                    content     : "➕";
                     margin-right: 2em;
-                    margin-left: -.15em;
+                    margin-left : -.15em;
+                }
+            }
+
+            &:nth-of-type(2) {
+                right: 17em;
+                .compact-btn();
+
+                &::before {
+                    content     : "➖";
+                    margin-right: 2em;
+                    margin-left : -.15em;
+                }
+            }
+
+            &:nth-of-type(3) {
+                right : 9.5em;
+                top   : auto;
+                bottom: 2em;
+                left  : 7.5em;
+
+                &::before {
+                    content     : "🗑️";
+                    margin-right: .5em;
+                    margin-left : -.15em;
+                }
+            }
+
+            &:nth-of-type(4) {
+                .compact-btn();
+                right: 2em;
+
+                &::before {
+                    content     : "💾";
+                    margin-right: 2em;
+                    margin-left : -.15em;
                 }
             }
         }
     }
+
     .move-ctrl-btn-mod(@control-btn-up);
 
 
 
     /* LARGE CHECKBOX MOD */
     .large-checkbox-mod(0) {}
+
     .large-checkbox-mod(1) {
         input[type="checkbox"] {
             transform: scale(2, 2) translate(0, -3px)
@@ -352,35 +425,43 @@
             transform: translate(0, 10px)
         }
     }
+
     .large-checkbox-mod(@large-checkbox);
 
 
 
     /* CONFIRM TABLE MODIFICATIONS */
     .confirm-table-mod(0) {}
+
     .confirm-table-mod(1) {
         app-page-confirmation tbody {
             counter-reset: validation-list;
         }
+
         app-page-confirmation tr td:first-child::before {
             counter-increment: validation-list;
-            content: counter(validation-list) ")  ";
-            opacity: 40%;
+            content          : counter(validation-list) ")  ";
+            opacity          : 40%;
         }
+
         app-page-confirmation .bi::before {
             transform: scale(2.5, 2.5) translate(.65em, 0);
         }
+
         .bi-check {
             color: green;
         }
+
         .bi-x {
             color: red;
         }
     }
+
     .confirm-table-mod(@confirm-table-mod);
 }
 
 @-moz-document url-prefix("https://vacunate-validator.tagshelf.io/pages/") {
+
     // overflow hidden only on validation page
     body when (@fullscreen-map=1) {
         overflow-y: hidden;

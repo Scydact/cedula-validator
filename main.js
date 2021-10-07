@@ -1,7 +1,7 @@
 const CED_LEN = 11
 var previous_ced = ''
 var current_permutes = []
-const JS_VERSION = 1
+const JS_VERSION = 1.1
 
 nodes = {
     input: document.getElementById('in'),
@@ -256,7 +256,7 @@ PARSER_GENERATORS = {
         }
     },
     AgeParser: age => {
-        const ageRegexMatch = age.trim().match(/^(?:(\d*)(\.\.)(\d*))|(\d+)/)
+        const ageRegexMatch = age.trim().match(/^(?:(\d*)(\.\.|-)(\d*))|(\d+)/)
         if (ageRegexMatch) {
             const [, min, , max, singleValue] = ageRegexMatch
 
