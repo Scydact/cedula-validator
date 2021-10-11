@@ -1,7 +1,7 @@
 const CED_LEN = 11
 var previous_ced = ''
 var current_permutes = []
-const JS_VERSION = 1.1
+const JS_VERSION = 1.2
 
 nodes = {
     input: document.getElementById('in'),
@@ -20,6 +20,7 @@ var current_permutes_stats = {
     found: 0,
     promises: [],
     provinces: new Set(),
+    genders: new Set(),
     animFrameId: undefined,
 }
 
@@ -29,6 +30,7 @@ function resetPermuteStats() {
     current_permutes_stats.lost = 0
     current_permutes_stats.promises = []
     current_permutes_stats.provinces.clear()
+    current_permutes_stats.genders.clear()
 
     const displayNode = document.getElementById('permute_stats')
     if (!displayNode && CED_API)
@@ -71,7 +73,7 @@ function onCedChange(e, forceUpdate) {
 
     // Update input formatting
     nodes.formatted_in.innerHTML = cedToHtml(input)
-    setSearchControlVisibility(false)
+    setSearchControlVisibility(!!CED_API) // If API available, enable search controls
     resetSearchControls()
     clearNode(info)
     info.classList.remove('ok')
@@ -135,8 +137,6 @@ function onCedChange(e, forceUpdate) {
             double_permute_button.remove()
 
             // Reset search controls & info
-            resetSearchControls()
-            setSearchControlVisibility(CED_API) // Only show if the API is available
             resetPermuteStats()
 
             // Create the actual permute list
@@ -146,7 +146,10 @@ function onCedChange(e, forceUpdate) {
             // Update stats
             current_permutes_stats.total = current_permutes.length
             current_permutes_stats.promises = validateCedStructList(current_permutes)
-                .map(x => x.then(val => updatePermuteStats(!!val)))
+                .map(x => x.then(ced => {
+                    updatePermuteStats(!!ced.validation_api)
+                    filterSingleCed(ced) // Update filter as new ced get validated.
+                }))
 
             const updateDisplay = () => {
                 displayPermuteStats()
@@ -170,6 +173,7 @@ function onCedChange(e, forceUpdate) {
                     else if (permute.validation_api) {
                         current_permutes_stats.found++
                         current_permutes_stats.provinces.add(permute.validation_api.province)
+                        current_permutes_stats.genders.add(permute.validation_api.gender)
                     }
                 }
                 displayPermuteStats()
@@ -178,6 +182,12 @@ function onCedChange(e, forceUpdate) {
                     if (province)
                         FORM_NODES.province.add(
                             createElement('option', province, null, { value: province })
+                        )
+                }
+                for (const gender of [...current_permutes_stats.genders].sort()) {
+                    if (gender)
+                        FORM_NODES.gender.add(
+                            createElement('option', gender, null, { value: gender })
                         )
                 }
             })
@@ -219,9 +229,11 @@ function doDoublePermute(ced) {
 const FORM_NODES = {
     container: document.getElementById('search_controls'),
     name: document.getElementById('search-name'),
+    nameFuzzyness: document.getElementById('search-name-fuzzyness'),
     age: document.getElementById('search-age'),
     valid: document.getElementById('search-valid'),
-    province: document.getElementById('search-province')
+    province: document.getElementById('search-province'),
+    gender: document.getElementById('search-gender'),
     // TODO: "variaciones de nombre", para probar diferentes letras (f -> ph, i -> y, n -> nn, z -> s, c -> k)
 }
 
@@ -229,16 +241,20 @@ const FORM_NODES = {
 FORM_NODES.age.title = 'Puede ser numero (30) o:\n'
     + '  * valor minimo = 10..\n'
     + '  * valor maximo = ..20\n'
-    + '  * rango = 10..20\n'
-    + '  * todo = ..\n'
+    + '  * rango = 10-20\n'
+    + '  * todo = -\n'
 
 function resetSearchControls() {
     FORM_NODES.name.value = ''
+    FORM_NODES.nameFuzzyness.value = 0
     FORM_NODES.age.value = ''
     FORM_NODES.valid.checked = false
     while (FORM_NODES.province.options.length)
         FORM_NODES.province.remove(0)
     FORM_NODES.province.add(createElement('option', ' - ', null, { value: null }))
+    while (FORM_NODES.gender.options.length)
+        FORM_NODES.gender.remove(0)
+    FORM_NODES.gender.add(createElement('option', ' - ', null, { value: null }))
 }
 
 function setSearchControlVisibility(visible) {
@@ -252,7 +268,18 @@ PARSER_GENERATORS = {
     NameParser: name => {
         const words = name.trim().toLowerCase().split(' ')
         return (x) => {
-            return words.every(word => x.toLowerCase().includes(word))
+            const y = x.toLowerCase()
+            return words.every(word => y.includes(word))
+        }
+    },
+    FuzzyNameParser: (name, distance) => {
+        const words = name.trim().toLowerCase().split(' ')
+        return (x) => {
+            const y = x.toLowerCase()
+            return words.every(word => {
+                const a = fuzzySearch(word, y, distance).next()
+                return !a.done
+            })
         }
     },
     AgeParser: age => {
@@ -277,17 +304,24 @@ PARSER_GENERATORS = {
     }
 }
 
-function onSearchControlChange() {
-    let name = FORM_NODES.name.value
-    let age = FORM_NODES.age.value
-    let valid = FORM_NODES.valid.checked
-    let province = FORM_NODES.province.value
 
-    const filters = []
+var search_filters = []
+function updateSearchFilters() {
+    const name = FORM_NODES.name.value
+    const nameFuzzyness = parseInt(FORM_NODES.nameFuzzyness.value)
+    const age = FORM_NODES.age.value
+    const valid = FORM_NODES.valid.checked
+    const province = FORM_NODES.province.value
+    const gender = FORM_NODES.gender.value
+
+    search_filters = []
 
     if (name !== '') {
-        const containsName = PARSER_GENERATORS.NameParser(name)
-        filters.push((permute) => {
+        const containsName = (nameFuzzyness)
+            ? PARSER_GENERATORS.FuzzyNameParser(name, nameFuzzyness)
+            : PARSER_GENERATORS.NameParser(name)
+
+        search_filters.push((permute) => {
             const { validation_api } = permute
             if (!validation_api) return false
 
@@ -298,7 +332,7 @@ function onSearchControlChange() {
 
     if (age !== '') {
         const isAgedProperly = PARSER_GENERATORS.AgeParser(age)
-        filters.push((permute) => {
+        search_filters.push((permute) => {
             const { validation_api } = permute
             if (!validation_api) return false
             return isAgedProperly(validation_api.age)
@@ -306,31 +340,45 @@ function onSearchControlChange() {
     }
 
     if (province && province !== 'null') {
-        filters.push((permute) => {
+        search_filters.push((permute) => {
             const { validation_api } = permute
             return validation_api?.province === province
         })
     }
+    if (gender && gender !== 'null') {
+        search_filters.push((permute) => {
+            const { validation_api } = permute
+            return validation_api?.gender === gender
+        })
+    }
 
     if (valid) {
-        filters.push((permute) => {
+        search_filters.push((permute) => {
             const { validation_api } = permute
             return !!validation_api
         })
     }
+}
 
-
-    for (const permute of current_permutes) {
-        let visible = true
-        for (const filter of filters) {
-            visible = filter(permute)
-            if (!visible) break
-        }
-        if (visible)
-            permute.node.classList.remove('hidden')
-        else
-            permute.node.classList.add('hidden')
+function filterSingleCed(permute) {
+    let visible = true
+    for (const filter of search_filters) {
+        visible = filter(permute)
+        if (!visible) break
     }
+    if (visible)
+        permute.node.classList.remove('hidden')
+    else
+        permute.node.classList.add('hidden')
+}
+
+function onSearchControlChange() {
+
+    updateSearchFilters()
+
+    // Filter all current results
+    for (const permute of current_permutes)
+        filterSingleCed(permute)
 }
 
 FORM_NODES.container.onchange = onSearchControlChange

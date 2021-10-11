@@ -236,7 +236,7 @@ function validateCedStructList(cedList) {
 function validateCedStruct(ced) {
     // If already validated, return empty response
     if (ced.validation_api !== undefined)
-        return new Promise((resolve) => resolve(ced.validation_api))
+        return new Promise((resolve) => resolve(ced))
 
     // Fetch name data, and update permute stats stuff (fetched count)
     return fetchUserByCed(ced.num).then(data => {
@@ -244,21 +244,33 @@ function validateCedStruct(ced) {
         if (!data || data.code != 200) {
             li.append(' ❌')
             ced.validation_api = null
-            return null
+            return ced
         } else {
             const { result } = data
             const obj = {
                 name: result.fullname,
                 age: result.age,
-                province: result?.county?.province?.description,
+                province: result.county?.province?.description,
+                gender: result.gender,
+                cancelled: result.cancellationReason,
             }
             ced.validation_api = obj
 
-            const txt = `${obj.name} (${obj.age}) [${obj.province || ' -Sin provincia- '}]`
+            const txt = [
+                obj.name,
+                `(${obj.age}, ${obj.gender})`,
+                `[${obj.province || ' -Sin provincia- '}]`,
+            ].join(' ')
             const userDataNode = createElement('p', txt)
+            if (obj.cancelled) {
+                const ded = createElement('span')
+                ded.title = obj.cancelled.description
+                ded.textContent = (obj.cancelled.description === 'FALLECIMIENTO') ? ' 💀' : ' ✖'
+                userDataNode.append(ded)
+            }
             li.append(userDataNode)
             li.classList.add('card', 'found-data')
-            return ced.validation_api
+            return ced
         }
     }, error => { })
 }

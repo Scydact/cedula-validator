@@ -15,14 +15,16 @@
     <main>
         <h2>Permutaciones de número de cédula</h2>
         <div id="input_container">
-            <input type="text" id="in" placeholder="No. cédula de ±11 digitos."
-                inputmode="numeric" />
+            <input type="search" id="in" placeholder="No. cédula de ±11 digitos." inputmode="numeric" />
             <span id="colored_in"></span>
         </div>
         <div id="info" class="card info"></div>
         <form id="search_controls" class="card" action="javascript:void(0);">
             <label>Nombre: <input type="search" name="search-name" id="search-name"></label>
+            <label>Similitud: <input type="range" min="0" max="6" value="0" name="search-name-fuzzyness"
+                    id="search-name-fuzzyness"></label>
             <label>Edad: <input type="search" name="search-age" id="search-age" inputmode="decimal"></label>
+            <label>Genero: <select name="search-gender" id="search-gender"></select></label>
             <label>Provincia: <select name="search-province" id="search-province"></select></label>
             <label>Valido: <input type="checkbox" name="search-valid" id="search-valid"></label>
         </form>
@@ -64,6 +66,7 @@
 
     <!-- Helpers -->
     <script src="algorithm_and_helpers.js"></script>
+    <script src="js-levenshtein.js"></script>
 
     <!-- API script :D -->
     <script src="cedula_api_support.js"></script>
