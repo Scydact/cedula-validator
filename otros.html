@@ -39,7 +39,7 @@
         href="javascript:(function()%7Bfunction dispatchChangeEvent(el) %7Bvar evt %3D document.createEvent('HTMLEvents')%3Bevt.initEvent('change'%2C false%2C true)%3Bel.dispatchEvent(evt)%3B%7Dvar doseNum %3D parseInt(prompt('Numero de dosis%3F')) - 1%3Bfor (const el of %5B...document.querySelectorAll('%23dose')%5D) %7Bel.options%5BdoseNum%5D.selected %3D 1%3BdispatchChangeEvent(el)%3B%7D%7D)()">
         Cambiar todas las dosis</a>
     <a class="bookmarklet"
-        href="javascript:(function()%7Bdocument.querySelectorAll('.form-check%3Alast-child input').forEach(x %3D> x.click())%7D)()">
+        href="javascript:(function()%7Bvar%20checks%20%3D%20%5B...document.querySelectorAll(%22.form-check%3Alast-child%20input%22)%5D%3Bif%20(checks.every(x%20%3D%3E%20x.checked))%20%7Bchecks.forEach(x%20%3D%3E%20x.click())%3B%7D%20else%20%7Bchecks.forEach(x%20%3D%3E%20%7Bif%20(!x.checked)%20%7Bx.click()%3B%7D%7D)%3B%7D%7D)()">
         Modificar todo manualmente</a>
 
     <h2>Estilos auxiliares</h2>
