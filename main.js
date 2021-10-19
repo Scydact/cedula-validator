@@ -177,6 +177,7 @@ function onCedChange(e, forceUpdate) {
                     }
                 }
                 displayPermuteStats()
+                onSearchControlChange() // Reupdate after all ceds have been refreshed.
 
                 for (const province of [...current_permutes_stats.provinces].sort()) {
                     if (province)
