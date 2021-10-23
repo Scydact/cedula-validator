@@ -66,7 +66,6 @@ function onCedChange(e, forceUpdate) {
     const frag = document.createDocumentFragment()
     const info = nodes.info
 
-    console.log(forceUpdate)
     // If nothing changed, do nothing.
     if (previous_ced === ced && !forceUpdate) return
     previous_ced = ced
@@ -147,15 +146,17 @@ function onCedChange(e, forceUpdate) {
             current_permutes_stats.total = current_permutes.length
             current_permutes_stats.promises = validateCedStructList(current_permutes)
                 .map(x => x.then(ced => {
-                    updatePermuteStats(!!ced.validation_api)
-                    filterSingleCed(ced) // Update filter as new ced get validated.
+                    if (ced) {
+                        updatePermuteStats(!!ced.validation_api)
+                        filterSingleCed(ced) // Update filter as new ced get validated.
+                    }
                 }))
 
             const updateDisplay = () => {
                 displayPermuteStats()
                 current_permutes_stats.animFrameId = requestAnimationFrame(updateDisplay)
             }
-            requestAnimationFrame(updateDisplay)
+            current_permutes_stats.animFrameId = requestAnimationFrame(updateDisplay)
 
             // Hide old list (now empty, since all nodes migrated to the new one)
             const permute_nodes = document.getElementById('permute_nodes')
@@ -165,6 +166,7 @@ function onCedChange(e, forceUpdate) {
             // Final stat update
             Promise.all(current_permutes_stats.promises).then(() => {
                 cancelAnimationFrame(current_permutes_stats.animFrameId)
+
                 current_permutes_stats.found = 0
                 current_permutes_stats.lost = 0
                 for (const permute of current_permutes) {

@@ -139,7 +139,7 @@ const PERMUTE_CASES = {
             return [
                 permuteCed11_sustitution(ced, i),
                 permuteCed11_flip(ced, i),
-            ].filter(x => x)
+            ].filter(x => !!x)
         },
         l: 11
     },
